@@ -125,12 +125,30 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenArgTypes {
+  DeadList: {
+    tasks: { // args
+      limit?: number | null; // Int
+      offset?: number | null; // Int
+    }
+  }
+  FailedList: {
+    tasks: { // args
+      limit?: number | null; // Int
+      offset?: number | null; // Int
+    }
+  }
   Query: {
     queue: { // args
       name: string; // String!
     }
   }
   Queue: {
+    tasks: { // args
+      limit?: number | null; // Int
+      offset?: number | null; // Int
+    }
+  }
+  ResultList: {
     tasks: { // args
       limit?: number | null; // Int
       offset?: number | null; // Int

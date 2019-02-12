@@ -8,7 +8,13 @@ type ActionStatus {
 
 type DeadList {
   taskCount: Int!
-  tasks: [Task!]
+  tasks(
+    """The number of items to fetch starting from the offset, for pagination"""
+    limit: Int = 10
+
+    """The number of items to skip, for pagination"""
+    offset: Int = 0
+  ): [Task!]
 }
 
 type ErrorLog {
@@ -19,7 +25,13 @@ type ErrorLog {
 
 type FailedList {
   taskCount: Int!
-  tasks: [Task!]
+  tasks(
+    """The number of items to fetch starting from the offset, for pagination"""
+    limit: Int = 10
+
+    """The number of items to skip, for pagination"""
+    offset: Int = 0
+  ): [Task!]
 }
 
 type Mutation {
@@ -53,7 +65,13 @@ type Queue {
 
 type ResultList {
   taskCount: Int!
-  tasks: [Task!]
+  tasks(
+    """The number of items to fetch starting from the offset, for pagination"""
+    limit: Int = 10
+
+    """The number of items to skip, for pagination"""
+    offset: Int = 0
+  ): [Task!]
 }
 
 type Stat {

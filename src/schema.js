@@ -8,6 +8,19 @@ exports.ActionStatus = objectType({
   }
 });
 
+const deserializeTask = t => {
+  const r = JSON.parse(t);
+  if (r.data) {
+    r.data = JSON.stringify(r.data);
+  }
+
+  if (r.result) {
+    r.result = JSON.stringify(r.result);
+  }
+
+  return r;
+};
+
 exports.DeadList = objectType({
   name: 'DeadList',
   definition(t) {
@@ -20,9 +33,24 @@ exports.DeadList = objectType({
     t.list.field('tasks', {
       nullable: true,
       type: 'Task',
-      resolve(root, args, ctx) {
-        console.log('Field resolver called for task');
-        // TODO: Implement
+      args: {
+        offset: intArg({
+          default: 0,
+          description: 'The number of items to skip, for pagination'
+        }),
+        limit: intArg({
+          default: 10,
+          description: 'The number of items to fetch starting from the offset, for pagination'
+        })
+      },
+      async resolve(root, { offset, limit }, { redis }) {
+        if (offset + limit - 1 >= 0) {
+          limit = offset + limit - 1;
+        } else {
+          return [];
+        }
+        const tasks = await redis.lrange(orkidDefaults.DEADLIST, offset, limit);
+        return tasks.map(t => deserializeTask(t));
       }
     });
   }
@@ -40,8 +68,24 @@ exports.ResultList = objectType({
     t.list.field('tasks', {
       nullable: true,
       type: 'Task',
-      resolve(root, args, ctx) {
-        // TODO: Implement
+      args: {
+        offset: intArg({
+          default: 0,
+          description: 'The number of items to skip, for pagination'
+        }),
+        limit: intArg({
+          default: 10,
+          description: 'The number of items to fetch starting from the offset, for pagination'
+        })
+      },
+      async resolve(root, { offset, limit }, { redis }) {
+        if (offset + limit - 1 >= 0) {
+          limit = offset + limit - 1;
+        } else {
+          return [];
+        }
+        const tasks = await redis.lrange(orkidDefaults.RESULTLIST, offset, limit);
+        return tasks.map(t => deserializeTask(t));
       }
     });
   }
@@ -59,8 +103,24 @@ exports.FailedList = objectType({
     t.list.field('tasks', {
       nullable: true,
       type: 'Task',
-      resolve(root, args, ctx) {
-        // TODO: Implement
+      args: {
+        offset: intArg({
+          default: 0,
+          description: 'The number of items to skip, for pagination'
+        }),
+        limit: intArg({
+          default: 10,
+          description: 'The number of items to fetch starting from the offset, for pagination'
+        })
+      },
+      async resolve(root, { offset, limit }, { redis }) {
+        if (offset + limit - 1 >= 0) {
+          limit = offset + limit - 1;
+        } else {
+          return [];
+        }
+        const tasks = await redis.lrange(orkidDefaults.FAILEDLIST, offset, limit);
+        return tasks.map(t => deserializeTask(t));
       }
     });
   }
