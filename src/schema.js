@@ -1,4 +1,4 @@
-const { objectType, arg, intArg, stringArg } = require('nexus');
+const { objectType, intArg, stringArg } = require('nexus');
 
 exports.ActionStatus = objectType({
   name: 'ActionStatus',
@@ -10,7 +10,11 @@ exports.ActionStatus = objectType({
 exports.DeadList = objectType({
   name: 'DeadList',
   definition(t) {
-    t.int('taskCount');
+    t.int('taskCount', {
+      resolve(root, args, ctx) {
+        // TODO: Implement
+      }
+    });
     t.list.field('tasks', {
       nullable: true,
       type: 'Task',
@@ -33,7 +37,11 @@ exports.ErrorLog = objectType({
 exports.FailedList = objectType({
   name: 'FailedList',
   definition(t) {
-    t.int('taskCount');
+    t.int('taskCount', {
+      resolve(root, args, ctx) {
+        // TODO: Implement
+      }
+    });
     t.list.field('tasks', {
       nullable: true,
       type: 'Task',
@@ -60,6 +68,12 @@ exports.Query = objectType({
     t.field('deadList', { nullable: true, type: 'DeadList' });
     t.field('failedList', { nullable: true, type: 'FailedList' });
     t.field('stat', { nullable: true, type: 'Stat' });
+    t.list.string('queueNames', {
+      nullable: true,
+      resolve(root, args, ctx) {
+        // TODO: Implement
+      }
+    });
     t.field('queue', {
       nullable: true,
       type: 'Queue',
@@ -67,6 +81,9 @@ exports.Query = objectType({
         name: stringArg({
           required: true
         })
+      },
+      resolve(root, args, ctx) {
+        // TODO: Implement
       }
     });
   }
@@ -99,8 +116,18 @@ exports.Queue = objectType({
 exports.ResultList = objectType({
   name: 'ResultList',
   definition(t) {
-    t.int('taskCount');
-    t.list.field('tasks', { nullable: true, type: 'Task' });
+    t.int('taskCount', {
+      resolve(root, args, ctx) {
+        // TODO: Implement
+      }
+    });
+    t.list.field('tasks', {
+      nullable: true,
+      type: 'Task',
+      resolve(root, args, ctx) {
+        // TODO: Implement
+      }
+    });
   }
 });
 
@@ -112,6 +139,9 @@ exports.Stat = objectType({
     t.int('dead');
     t.int('enqueued');
     t.int('retries');
+  },
+  defaultResolver(root, args, ctx) {
+    // TODO: Implement
   }
 });
 
