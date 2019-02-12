@@ -1,22 +1,14 @@
-const { queryType, stringArg, makeSchema } = require('nexus');
+const { makeSchema } = require('nexus');
 const { ApolloServer, gql } = require('apollo-server-express');
 const { GraphQLError } = require('graphql');
 const { v4 } = require('uuid');
+const types = require('./schema');
 
 const express = require('express');
 const cors = require('cors');
 
-const Query = queryType({
-  definition(t) {
-    t.string('hello', {
-      args: { name: stringArg({ nullable: true }) },
-      resolve: (parent, { name }) => `Hello ${name || 'World'}!`
-    });
-  }
-});
-
 const schema = makeSchema({
-  types: [Query],
+  types,
   outputs: {
     schema: __dirname + '/../generated/schema.graphql',
     typegen: __dirname + '/../generated/typings.ts'

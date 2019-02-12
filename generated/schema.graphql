@@ -2,6 +2,74 @@
 ### Do not make changes to this file directly
 
 
+type ActionStatus {
+  success: Boolean
+}
+
+type DeadList {
+  taskCount: Int!
+  tasks: [Task!]
+}
+
+type ErrorLog {
+  message: String
+  name: String
+  stack: String
+}
+
+type FailedList {
+  taskCount: Int!
+  tasks: [Task!]
+}
+
+type Mutation {
+  allActive: Boolean
+  pauseAll: ActionStatus
+  resumeAll: ActionStatus
+}
+
 type Query {
-  hello(name: String): String!
+  deadList: DeadList
+  failedList: FailedList
+  queue(name: String!): Queue
+  resultList: ResultList
+  stat: Stat
+}
+
+type Queue {
+  active: Boolean
+  name: String!
+  taskCount: Int!
+  tasks(
+    """The number of items to fetch starting from the offset, for pagination"""
+    limit: Int = 10
+
+    """The number of items to skip, for pagination"""
+    offset: Int = 0
+  ): [Task!]
+  workerCount: Int!
+}
+
+type ResultList {
+  taskCount: Int!
+  tasks: [Task!]
+}
+
+type Stat {
+  dead: Int!
+  enqueued: Int!
+  failed: Int!
+  retries: Int!
+  total: Int!
+}
+
+type Task {
+  at: String
+  data: String
+  dedupKey: String
+  error: ErrorLog
+  id: String
+  qname: String
+  result: String
+  retryCount: Int
 }

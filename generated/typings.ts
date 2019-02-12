@@ -17,7 +17,50 @@ export interface NexusGenEnums {
 }
 
 export interface NexusGenRootTypes {
+  ActionStatus: { // root type
+    success?: boolean | null; // Boolean
+  }
+  DeadList: { // root type
+    taskCount: number; // Int!
+  }
+  ErrorLog: { // root type
+    message?: string | null; // String
+    name?: string | null; // String
+    stack?: string | null; // String
+  }
+  FailedList: { // root type
+    taskCount: number; // Int!
+  }
+  Mutation: {};
   Query: {};
+  Queue: { // root type
+    active?: boolean | null; // Boolean
+    name: string; // String!
+    taskCount: number; // Int!
+    tasks?: NexusGenRootTypes['Task'][] | null; // [Task!]
+    workerCount: number; // Int!
+  }
+  ResultList: { // root type
+    taskCount: number; // Int!
+    tasks?: NexusGenRootTypes['Task'][] | null; // [Task!]
+  }
+  Stat: { // root type
+    dead: number; // Int!
+    enqueued: number; // Int!
+    failed: number; // Int!
+    retries: number; // Int!
+    total: number; // Int!
+  }
+  Task: { // root type
+    at?: string | null; // String
+    data?: string | null; // String
+    dedupKey?: string | null; // String
+    error?: NexusGenRootTypes['ErrorLog'] | null; // ErrorLog
+    id?: string | null; // String
+    qname?: string | null; // String
+    result?: string | null; // String
+    retryCount?: number | null; // Int
+  }
   String: string;
   Int: number;
   Float: number;
@@ -29,15 +72,74 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 }
 
 export interface NexusGenFieldTypes {
+  ActionStatus: { // field return type
+    success: boolean | null; // Boolean
+  }
+  DeadList: { // field return type
+    taskCount: number; // Int!
+    tasks: NexusGenRootTypes['Task'][] | null; // [Task!]
+  }
+  ErrorLog: { // field return type
+    message: string | null; // String
+    name: string | null; // String
+    stack: string | null; // String
+  }
+  FailedList: { // field return type
+    taskCount: number; // Int!
+    tasks: NexusGenRootTypes['Task'][] | null; // [Task!]
+  }
+  Mutation: { // field return type
+    allActive: boolean | null; // Boolean
+    pauseAll: NexusGenRootTypes['ActionStatus'] | null; // ActionStatus
+    resumeAll: NexusGenRootTypes['ActionStatus'] | null; // ActionStatus
+  }
   Query: { // field return type
-    hello: string; // String!
+    deadList: NexusGenRootTypes['DeadList'] | null; // DeadList
+    failedList: NexusGenRootTypes['FailedList'] | null; // FailedList
+    queue: NexusGenRootTypes['Queue'] | null; // Queue
+    resultList: NexusGenRootTypes['ResultList'] | null; // ResultList
+    stat: NexusGenRootTypes['Stat'] | null; // Stat
+  }
+  Queue: { // field return type
+    active: boolean | null; // Boolean
+    name: string; // String!
+    taskCount: number; // Int!
+    tasks: NexusGenRootTypes['Task'][] | null; // [Task!]
+    workerCount: number; // Int!
+  }
+  ResultList: { // field return type
+    taskCount: number; // Int!
+    tasks: NexusGenRootTypes['Task'][] | null; // [Task!]
+  }
+  Stat: { // field return type
+    dead: number; // Int!
+    enqueued: number; // Int!
+    failed: number; // Int!
+    retries: number; // Int!
+    total: number; // Int!
+  }
+  Task: { // field return type
+    at: string | null; // String
+    data: string | null; // String
+    dedupKey: string | null; // String
+    error: NexusGenRootTypes['ErrorLog'] | null; // ErrorLog
+    id: string | null; // String
+    qname: string | null; // String
+    result: string | null; // String
+    retryCount: number | null; // Int
   }
 }
 
 export interface NexusGenArgTypes {
   Query: {
-    hello: { // args
-      name?: string | null; // String
+    queue: { // args
+      name: string; // String!
+    }
+  }
+  Queue: {
+    tasks: { // args
+      limit?: number | null; // Int
+      offset?: number | null; // Int
     }
   }
 }
@@ -47,7 +149,7 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Query";
+export type NexusGenObjectNames = "ActionStatus" | "DeadList" | "ErrorLog" | "FailedList" | "Mutation" | "Query" | "Queue" | "ResultList" | "Stat" | "Task";
 
 export type NexusGenInputNames = never;
 
