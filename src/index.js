@@ -4,8 +4,14 @@ const { GraphQLError } = require('graphql');
 const { v4 } = require('uuid');
 const types = require('./schema');
 
+const prepareIoredis = require('../utils/prepare-ioredis');
+prepareIoredis();
+
+const IORedis = require('ioredis');
 const express = require('express');
 const cors = require('cors');
+
+const redis = new IORedis(); // TODO: Pass redis config here
 
 const schema = makeSchema({
   types,
@@ -27,7 +33,8 @@ const apollo = new ApolloServer({
   },
   cors: true, // TODO: Pass custom corsOptions
   context: ({ req }) => ({
-    req
+    req,
+    redis
   })
 });
 

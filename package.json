@@ -30,7 +30,7 @@
     "graphql": "^14.1.1",
     "graphql-tools": "^4.0.4",
     "ioredis": "^4.6.2",
-    "nexus": "^0.9.9",
+    "nexus": "^0.9.11",
     "prompt-confirm": "^2.0.4",
     "uuid": "^3.3.2"
   },

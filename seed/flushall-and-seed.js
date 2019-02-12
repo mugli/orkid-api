@@ -8,13 +8,7 @@ const chalk = require('chalk');
 const faker = require('faker');
 const log = console.log;
 
-const orkidDefaults = {
-  NAMESPACE: 'orkid',
-  RESULTLIST: 'orkid:internals:results',
-  FAILEDLIST: 'orkid:internals:failed',
-  DEADLIST: 'orkid:internals:dead',
-  STAT: 'orkid:internals:stat'
-};
+const { orkidDefaults } = require('../src/common');
 
 const queues = [
   { name: 'mailer', fn: getMailTask },
