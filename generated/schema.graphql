@@ -36,6 +36,7 @@ type FailedList {
 
 type Mutation {
   allActive: Boolean
+  deleteQueue: ActionStatus
   pauseAll: ActionStatus
   resumeAll: ActionStatus
 }

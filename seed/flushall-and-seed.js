@@ -145,7 +145,8 @@ async function seedQueues() {
   for (const q of queues) {
     for (let i = 0; i < 1000; i++) {
       const task = q.fn();
-      pipeline.redis.xadd(
+      pipeline.sadd(orkidDefaults.QUENAMES, q.name);
+      pipeline.xadd(
         `${orkidDefaults.NAMESPACE}:queue:${q.name}`,
         '*',
         'data',

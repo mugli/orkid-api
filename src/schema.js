@@ -137,10 +137,12 @@ exports.ErrorLog = objectType({
 
 exports.Mutation = objectType({
   name: 'Mutation',
+  // TODO: Implement
   definition(t) {
     t.boolean('allActive', { nullable: true });
     t.field('pauseAll', { nullable: true, type: 'ActionStatus' });
     t.field('resumeAll', { nullable: true, type: 'ActionStatus' });
+    t.field('deleteQueue', { nullable: true, type: 'ActionStatus' });
   }
 });
 
@@ -228,8 +230,9 @@ exports.Query = objectType({
     t.list.field('queueNames', {
       nullable: true,
       type: 'String',
-      async resolve(root, args, ctx) {
-        // TODO: Implement
+      async resolve(root, args, { redis }) {
+        const queueNames = await redis.smembers(orkidDefaults.QUENAMES);
+        return queueNames;
       }
     });
     t.field('queue', {

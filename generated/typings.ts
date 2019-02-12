@@ -83,6 +83,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     allActive: boolean | null; // Boolean
+    deleteQueue: NexusGenRootTypes['ActionStatus'] | null; // ActionStatus
     pauseAll: NexusGenRootTypes['ActionStatus'] | null; // ActionStatus
     resumeAll: NexusGenRootTypes['ActionStatus'] | null; // ActionStatus
   }
