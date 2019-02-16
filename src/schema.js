@@ -190,7 +190,25 @@ exports.Queue = objectType({
       const taskCount = await redis.xlen(qname);
       return taskCount;
     });
-    t.int('activeWorkerCount'); // TODO: Implement
+    t.int('activeWorkerCount', async (root, args, { redis }) => {
+      const clients = (await redis.client('LIST')).split('\n');
+      let retval = 0;
+
+      for (const cli of clients) {
+        cli.split(' ').map(v => {
+          if (v.startsWith('name=')) {
+            const namePair = v.split('=');
+            if (namePair.length > 1 && namePair[1]) {
+              if (namePair[1].startsWith(`${orkidDefaults.NAMESPACE}:queue:${root.name}:cg:c:`)) {
+                retval++;
+              }
+            }
+          }
+        });
+      }
+
+      return retval;
+    });
     t.boolean('isActive'); // TODO: Implement
     t.field('taskFeed', {
       nullable: true,

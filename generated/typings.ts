@@ -30,7 +30,6 @@ export interface NexusGenRootTypes {
   Mutation: {};
   Query: {};
   Queue: { // root type
-    activeWorkerCount: number; // Int!
     isActive: boolean; // Boolean!
     name: string; // String!
   }
