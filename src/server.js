@@ -1,25 +1,17 @@
-const { makeSchema } = require('nexus');
-const { ApolloServer, gql } = require('apollo-server-express');
-const { GraphQLError } = require('graphql');
-const { v4 } = require('uuid');
-const types = require('./schema');
-
-const prepareIoredis = require('../utils/prepare-ioredis');
-prepareIoredis();
-
-const IORedis = require('ioredis');
 const express = require('express');
 const cors = require('cors');
 
-const redis = new IORedis(); // TODO: Pass redis config here
+const { ApolloServer } = require('apollo-server-express');
+const { GraphQLError } = require('graphql');
+const { v4 } = require('uuid');
 
-const schema = makeSchema({
-  types,
-  outputs: {
-    schema: __dirname + '/../generated/schema.graphql',
-    typegen: __dirname + '/../generated/typings.ts'
-  }
-});
+const prepareIoredis = require('../utils/prepare-ioredis');
+prepareIoredis();
+const IORedis = require('ioredis');
+
+const redis = new IORedis(); // TODO: Pass redis config
+
+const { schema } = require('./graphql-schema');
 
 const apollo = new ApolloServer({
   schema,
