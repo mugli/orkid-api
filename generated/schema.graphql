@@ -23,7 +23,6 @@ type FailedList {
 }
 
 type Mutation {
-  allActive: Boolean
   deleteQueue: ActionStatus
   pauseAll: ActionStatus
   resumeAll: ActionStatus
@@ -40,7 +39,7 @@ type Query {
 
 type Queue {
   activeWorkerCount: Int!
-  isActive: Boolean!
+  isPaused: Boolean!
   name: String!
   taskCount: Int!
   taskFeed(limit: Int = 10, nextCursor: String = null): TaskFeed
@@ -56,6 +55,7 @@ type Stat {
   enqueued: Int!
   failed: Int!
   retries: Int!
+  someQueuesArePaused: Boolean!
   total: Int!
 }
 

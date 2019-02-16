@@ -135,12 +135,28 @@ exports.ErrorLog = objectType({
 
 exports.Mutation = objectType({
   name: 'Mutation',
-  // TODO: Implement
   definition(t) {
-    t.boolean('allActive', { nullable: true });
-    t.field('pauseAll', { nullable: true, type: 'ActionStatus' });
-    t.field('resumeAll', { nullable: true, type: 'ActionStatus' });
-    t.field('deleteQueue', { nullable: true, type: 'ActionStatus' });
+    t.field('pauseAll', {
+      nullable: true,
+      type: 'ActionStatus',
+      resolve() {
+        // TODO: Implement
+      }
+    });
+    t.field('resumeAll', {
+      nullable: true,
+      type: 'ActionStatus',
+      resolve() {
+        // TODO: Implement
+      }
+    });
+    t.field('deleteQueue', {
+      nullable: true,
+      type: 'ActionStatus',
+      resolve() {
+        // TODO: Implement
+      }
+    });
   }
 });
 
@@ -152,6 +168,23 @@ exports.Stat = objectType({
     t.int('dead');
     t.int('enqueued');
     t.int('retries');
+    t.boolean('someQueuesArePaused', async (root, args, { redis }) => {
+      const queueNames = await redis.smembers(orkidDefaults.QUENAMES);
+      const settingsKeys = queueNames.map(q => `${orkidDefaults.NAMESPACE}:queue:${q}:settings`);
+      const allPaused = (await Promise.all(settingsKeys.map(k => redis.hget(k, 'paused')))).map(
+        v => !!v && Number(v) === 1
+      );
+
+      let retval = false;
+      for (const v of allPaused) {
+        if (v) {
+          retval = true;
+          break;
+        }
+      }
+
+      return retval;
+    });
   }
 });
 
@@ -209,7 +242,13 @@ exports.Queue = objectType({
 
       return retval;
     });
-    t.boolean('isActive'); // TODO: Implement
+    t.boolean('isPaused', async (root, args, { redis }) => {
+      const settingsKey = `${orkidDefaults.NAMESPACE}:queue:${root.name}:settings`;
+      const val = await redis.hget(settingsKey, 'paused');
+      const result = !!val && Number(val) === 1;
+
+      return result;
+    });
     t.field('taskFeed', {
       nullable: true,
       type: 'TaskFeed',

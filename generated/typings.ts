@@ -30,7 +30,6 @@ export interface NexusGenRootTypes {
   Mutation: {};
   Query: {};
   Queue: { // root type
-    isActive: boolean; // Boolean!
     name: string; // String!
   }
   ResultList: {};
@@ -84,7 +83,6 @@ export interface NexusGenFieldTypes {
     taskFeed: NexusGenRootTypes['TaskFeed'] | null; // TaskFeed
   }
   Mutation: { // field return type
-    allActive: boolean | null; // Boolean
     deleteQueue: NexusGenRootTypes['ActionStatus'] | null; // ActionStatus
     pauseAll: NexusGenRootTypes['ActionStatus'] | null; // ActionStatus
     resumeAll: NexusGenRootTypes['ActionStatus'] | null; // ActionStatus
@@ -99,7 +97,7 @@ export interface NexusGenFieldTypes {
   }
   Queue: { // field return type
     activeWorkerCount: number; // Int!
-    isActive: boolean; // Boolean!
+    isPaused: boolean; // Boolean!
     name: string; // String!
     taskCount: number; // Int!
     taskFeed: NexusGenRootTypes['TaskFeed'] | null; // TaskFeed
@@ -113,6 +111,7 @@ export interface NexusGenFieldTypes {
     enqueued: number; // Int!
     failed: number; // Int!
     retries: number; // Int!
+    someQueuesArePaused: boolean; // Boolean!
     total: number; // Int!
   }
   Task: { // field return type
