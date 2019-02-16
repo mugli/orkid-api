@@ -17,6 +17,9 @@
   "bugs": {
     "url": "https://github.com/mugli/orkid-api/issues"
   },
+  "engines": {
+    "node": ">=10.0.0"
+  },
   "homepage": "https://github.com/mugli/orkid-api#readme",
   "dependencies": {
     "apollo-server-express": "^2.4.0",

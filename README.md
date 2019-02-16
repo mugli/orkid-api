@@ -1,30 +1,42 @@
 # orkid-api
 
-GraphQL API to Monitor and Manage Orkid Task Queue.
+[![NPM version](https://img.shields.io/npm/v/orkid-api.svg)](https://www.npmjs.com/package/orkid-api)
+![](https://img.shields.io/david/mugli/orkid-api.svg?style=flat)
+![](https://img.shields.io/david/dev/mugli/orkid-api.svg?style=flat)
+![](https://img.shields.io/node/v/orkid-api.svg?style=flat)
+![](https://img.shields.io/npm/l/orkid-api.svg?style=flat)
 
-**This package comes bundled with Orkid UI.**
-End users of Orkid Queue don't have to install this separately.
+GraphQL API to monitor and manage [Orkid task queue](https://github.com/mugli/orkid-node).
+
+📎 **This package should come bundled with Orkid UI.**
+End users of [Orkid queue](https://github.com/mugli/orkid-node) don't have to use this separately.
 
 ![screenshot](https://raw.githubusercontent.com/mugli/orkid-api/master/screenshot.png)
 
-_If you are contributing to the API or UI, please read below._
+_If you are contributing to the API or UI projects, please read below._
+
+--
 
 ## Install
+
+In a project where you want to consume the API (typically an Orkid UI project):
 
 ```
 npm install orkid-api --save
 ```
 
-## Development
+## Development Mode
 
 ### Minimum Requirements
 
 - Node.js >= 10
 - Redis >= 5
 
-### Seed Data
+### Seed Initial Data
 
-You don't have to have Orkid running so that the API can return data. There is a seed script that can generate necessary data in redis.
+You don't have to have Orkid running so that the API can return data from Redis for development purpose. The seed script generates necessary data in redis.
+
+Make sure `redis-server` is running. Then:
 
 ```
 npm run flush-and-seed
@@ -32,11 +44,15 @@ npm run flush-and-seed
 
 **Warning: It will DELETE all existing data in Redis!**
 
-Running the command will ask if it is ok to delete existing data and proceed with seed. Enter `Yes` to continue.
+Running the command will ask if it is ok to delete existing data and proceed with seed.
 
-### Start the GraphQL API Server in development mode
+> All data in your redis sever will be cleared. Proceed? (y/N)
 
-Make sure Redis server is running. Then:
+Enter `y` to continue.
+
+### Start the GraphQL API Server
+
+Make sure `redis-server` is running. Then:
 
 ```
 npm run dev
@@ -47,3 +63,11 @@ It should show:
 > Orkid API ready at http://localhost:4000/graphql
 
 Open the URL in the browser to launch GraphQL playground (showed in the screenshot above).
+
+## Authors
+
+- Mehdi Hasan Khan ([@MehdiHK](https://twitter.com/MehdiHK))
+
+## License
+
+MIT
