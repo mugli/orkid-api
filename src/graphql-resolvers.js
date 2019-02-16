@@ -163,10 +163,17 @@ exports.Mutation = objectType({
 exports.Stat = objectType({
   name: 'Stat',
   definition(t) {
-    t.int('total');
+    t.int('processed');
     t.int('failed');
     t.int('dead');
-    t.int('enqueued');
+    t.int('waiting', async (root, args, { redis }) => {
+      const queueNames = await redis.smembers(orkidDefaults.QUENAMES);
+      const keys = queueNames.map(q => `${orkidDefaults.NAMESPACE}:queue:${q}`);
+
+      let waiting = (await Promise.all(keys.map(k => redis.xlen(k)))).reduce((acc, cur) => acc + cur, 0);
+
+      return waiting;
+    });
     t.int('retries');
     t.boolean('someQueuesArePaused', async (root, args, { redis }) => {
       const queueNames = await redis.smembers(orkidDefaults.QUENAMES);

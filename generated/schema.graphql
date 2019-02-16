@@ -52,11 +52,11 @@ type ResultList {
 
 type Stat {
   dead: Int!
-  enqueued: Int!
   failed: Int!
+  processed: Int!
   retries: Int!
   someQueuesArePaused: Boolean!
-  total: Int!
+  waiting: Int!
 }
 
 type Task {

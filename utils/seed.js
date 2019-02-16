@@ -25,10 +25,10 @@ async function seed(redisConfig) {
 
 async function seedStat(redis) {
   await redis.hmset(orkidDefaults.STAT, {
-    total: faker.random.number(),
+    processed: faker.random.number(),
     failed: faker.random.number(),
     dead: faker.random.number(),
-    enqueued: faker.random.number(),
+    // waiting: will be calculated dynamically,
     retries: faker.random.number()
   });
 }

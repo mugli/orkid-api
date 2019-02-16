@@ -35,10 +35,9 @@ export interface NexusGenRootTypes {
   ResultList: {};
   Stat: { // root type
     dead: number; // Int!
-    enqueued: number; // Int!
     failed: number; // Int!
+    processed: number; // Int!
     retries: number; // Int!
-    total: number; // Int!
   }
   Task: { // root type
     at?: string | null; // String
@@ -108,11 +107,11 @@ export interface NexusGenFieldTypes {
   }
   Stat: { // field return type
     dead: number; // Int!
-    enqueued: number; // Int!
     failed: number; // Int!
+    processed: number; // Int!
     retries: number; // Int!
     someQueuesArePaused: boolean; // Boolean!
-    total: number; // Int!
+    waiting: number; // Int!
   }
   Task: { // field return type
     at: string | null; // String
