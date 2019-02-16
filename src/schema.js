@@ -1,5 +1,6 @@
 const { objectType, intArg, stringArg } = require('nexus');
 const { orkidDefaults } = require('./common');
+const { Base64 } = require('js-base64');
 
 exports.ActionStatus = objectType({
   name: 'ActionStatus',
@@ -7,6 +8,27 @@ exports.ActionStatus = objectType({
     t.boolean('success', { nullable: true });
   }
 });
+
+const getResultFeed = async (redis, feedName, nextCursor, limit) => {
+  const start = nextCursor ? Number(Base64.decode(nextCursor)) : 0;
+  const oneMore = start + limit;
+
+  const tasks = (await redis.lrange(feedName, start, oneMore)).map(t => deserializeTask(t));
+  let hasNextPage = false;
+  let newCursor = null;
+
+  if (limit + 1 === tasks.length) {
+    hasNextPage = true;
+    tasks.pop();
+    newCursor = Base64.encode(oneMore);
+  }
+
+  return {
+    hasNextPage,
+    nextCursor: newCursor,
+    tasks
+  };
+};
 
 const deserializeTask = t => {
   const r = JSON.parse(t);
@@ -30,28 +52,19 @@ exports.DeadList = objectType({
         return taskCount;
       }
     });
-    t.list.field('tasks', {
+    t.field('taskFeed', {
       nullable: true,
-      type: 'Task',
+      type: 'TaskFeed',
       args: {
-        // TODO: Change to cursor based pagination for consistency
-        offset: intArg({
-          default: 0,
-          description: 'The number of items to skip, for pagination'
+        nextCursor: stringArg({
+          default: null
         }),
         limit: intArg({
-          default: 10,
-          description: 'The number of items to fetch starting from the offset, for pagination'
+          default: 10
         })
       },
-      async resolve(root, { offset, limit }, { redis }) {
-        if (offset + limit - 1 >= 0) {
-          limit = offset + limit - 1;
-        } else {
-          return [];
-        }
-        const tasks = await redis.lrange(orkidDefaults.DEADLIST, offset, limit);
-        return tasks.map(t => deserializeTask(t));
+      resolve(root, { nextCursor, limit }, { redis }) {
+        return getResultFeed(redis, orkidDefaults.DEADLIST, nextCursor, limit);
       }
     });
   }
@@ -66,28 +79,19 @@ exports.ResultList = objectType({
         return taskCount;
       }
     });
-    t.list.field('tasks', {
+    t.field('taskFeed', {
       nullable: true,
-      type: 'Task',
+      type: 'TaskFeed',
       args: {
-        // TODO: Change to cursor based pagination for consistency
-        offset: intArg({
-          default: 0,
-          description: 'The number of items to skip, for pagination'
+        nextCursor: stringArg({
+          default: null
         }),
         limit: intArg({
-          default: 10,
-          description: 'The number of items to fetch starting from the offset, for pagination'
+          default: 10
         })
       },
-      async resolve(root, { offset, limit }, { redis }) {
-        if (offset + limit - 1 >= 0) {
-          limit = offset + limit - 1;
-        } else {
-          return [];
-        }
-        const tasks = await redis.lrange(orkidDefaults.RESULTLIST, offset, limit);
-        return tasks.map(t => deserializeTask(t));
+      resolve(root, { nextCursor, limit }, { redis }) {
+        return getResultFeed(redis, orkidDefaults.RESULTLIST, nextCursor, limit);
       }
     });
   }
@@ -102,28 +106,19 @@ exports.FailedList = objectType({
         return taskCount;
       }
     });
-    t.list.field('tasks', {
+    t.field('taskFeed', {
       nullable: true,
-      type: 'Task',
+      type: 'TaskFeed',
       args: {
-        // TODO: Change to cursor based pagination for consistency
-        offset: intArg({
-          default: 0,
-          description: 'The number of items to skip, for pagination'
+        nextCursor: stringArg({
+          default: null
         }),
         limit: intArg({
-          default: 10,
-          description: 'The number of items to fetch starting from the offset, for pagination'
+          default: 10
         })
       },
-      async resolve(root, { offset, limit }, { redis }) {
-        if (offset + limit - 1 >= 0) {
-          limit = offset + limit - 1;
-        } else {
-          return [];
-        }
-        const tasks = await redis.lrange(orkidDefaults.FAILEDLIST, offset, limit);
-        return tasks.map(t => deserializeTask(t));
+      resolve(root, { nextCursor, limit }, { redis }) {
+        return getResultFeed(redis, orkidDefaults.FAILEDLIST, nextCursor, limit);
       }
     });
   }
@@ -174,6 +169,18 @@ exports.Task = objectType({
   }
 });
 
+exports.TaskFeed = objectType({
+  name: 'TaskFeed',
+  definition(t) {
+    t.string('nextCursor', { nullable: true });
+    t.boolean('hasNextPage');
+    t.list.field('tasks', {
+      type: 'Task',
+      nullable: true
+    });
+  }
+});
+
 exports.Queue = objectType({
   name: 'Queue',
   definition(t) {
@@ -185,20 +192,19 @@ exports.Queue = objectType({
     });
     t.int('activeWorkerCount'); // TODO: Implement
     t.boolean('active'); // TODO: Implement
-    t.list.field('tasks', {
+    t.field('taskFeed', {
       nullable: true,
-      type: 'Task',
+      type: 'TaskFeed',
       args: {
-        // TODO: Change to cursor based pagination because XRANGE (https://redis.io/commands/xrange)
-        // doesn't offer a good way to do offset based pagination
-        offset: intArg({
-          default: 0,
-          description: 'The number of items to skip, for pagination'
+        nextCursor: stringArg({
+          default: null
         }),
         limit: intArg({
-          default: 10,
-          description: 'The number of items to fetch starting from the offset, for pagination'
+          default: 10
         })
+      },
+      resolve(root, { nextCursor, limit }, { redis }) {
+        // TODO: Implement
       }
     });
   }

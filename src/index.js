@@ -25,12 +25,14 @@ const apollo = new ApolloServer({
   schema,
   mocks: false,
   tracing: true,
+  /*
   formatError: error => {
     const errId = v4();
 
     console.log(`GraphQL Error ${errId}`, error);
     return new GraphQLError(`Internal Error ${errId}`);
   },
+  */
   cors: true, // TODO: Pass custom corsOptions
   context: ({ req }) => ({
     req,

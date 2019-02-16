@@ -8,13 +8,7 @@ type ActionStatus {
 
 type DeadList {
   taskCount: Int!
-  tasks(
-    """The number of items to fetch starting from the offset, for pagination"""
-    limit: Int = 10
-
-    """The number of items to skip, for pagination"""
-    offset: Int = 0
-  ): [Task!]
+  taskFeed(limit: Int = 10, nextCursor: String = null): TaskFeed
 }
 
 type ErrorLog {
@@ -25,13 +19,7 @@ type ErrorLog {
 
 type FailedList {
   taskCount: Int!
-  tasks(
-    """The number of items to fetch starting from the offset, for pagination"""
-    limit: Int = 10
-
-    """The number of items to skip, for pagination"""
-    offset: Int = 0
-  ): [Task!]
+  taskFeed(limit: Int = 10, nextCursor: String = null): TaskFeed
 }
 
 type Mutation {
@@ -55,24 +43,12 @@ type Queue {
   activeWorkerCount: Int!
   name: String!
   taskCount: Int!
-  tasks(
-    """The number of items to fetch starting from the offset, for pagination"""
-    limit: Int = 10
-
-    """The number of items to skip, for pagination"""
-    offset: Int = 0
-  ): [Task!]
+  taskFeed(limit: Int = 10, nextCursor: String = null): TaskFeed
 }
 
 type ResultList {
   taskCount: Int!
-  tasks(
-    """The number of items to fetch starting from the offset, for pagination"""
-    limit: Int = 10
-
-    """The number of items to skip, for pagination"""
-    offset: Int = 0
-  ): [Task!]
+  taskFeed(limit: Int = 10, nextCursor: String = null): TaskFeed
 }
 
 type Stat {
@@ -92,4 +68,10 @@ type Task {
   qname: String
   result: String
   retryCount: Int
+}
+
+type TaskFeed {
+  hasNextPage: Boolean!
+  nextCursor: String
+  tasks: [Task!]
 }
