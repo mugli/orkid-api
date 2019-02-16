@@ -1,6 +1,6 @@
 # orkid-api
 
-GraphQL API for Orkid Task Queue Monitoring and Management.
+GraphQL API to Monitor and Manage Orkid Task Queue.
 
 **This package comes bundled with Orkid UI.**
 End users of Orkid Queue don't have to install this separately.
