@@ -34,6 +34,7 @@ exports.DeadList = objectType({
       nullable: true,
       type: 'Task',
       args: {
+        // TODO: Change to cursor based pagination for consistency
         offset: intArg({
           default: 0,
           description: 'The number of items to skip, for pagination'
@@ -69,6 +70,7 @@ exports.ResultList = objectType({
       nullable: true,
       type: 'Task',
       args: {
+        // TODO: Change to cursor based pagination for consistency
         offset: intArg({
           default: 0,
           description: 'The number of items to skip, for pagination'
@@ -104,6 +106,7 @@ exports.FailedList = objectType({
       nullable: true,
       type: 'Task',
       args: {
+        // TODO: Change to cursor based pagination for consistency
         offset: intArg({
           default: 0,
           description: 'The number of items to skip, for pagination'
@@ -146,30 +149,6 @@ exports.Mutation = objectType({
   }
 });
 
-exports.Queue = objectType({
-  name: 'Queue',
-  definition(t) {
-    t.string('name');
-    t.int('taskCount');
-    t.int('workerCount');
-    t.boolean('active', { nullable: true });
-    t.list.field('tasks', {
-      nullable: true,
-      type: 'Task',
-      args: {
-        offset: intArg({
-          default: 0,
-          description: 'The number of items to skip, for pagination'
-        }),
-        limit: intArg({
-          default: 10,
-          description: 'The number of items to fetch starting from the offset, for pagination'
-        })
-      }
-    });
-  }
-});
-
 exports.Stat = objectType({
   name: 'Stat',
   definition(t) {
@@ -192,6 +171,36 @@ exports.Task = objectType({
     t.string('result', { nullable: true });
     t.field('error', { nullable: true, type: 'ErrorLog' });
     t.string('at', { nullable: true });
+  }
+});
+
+exports.Queue = objectType({
+  name: 'Queue',
+  definition(t) {
+    t.string('name');
+    t.int('taskCount', async (root, args, { redis }) => {
+      const qname = `${orkidDefaults.NAMESPACE}:queue:${root.name}`;
+      const taskCount = await redis.xlen(qname);
+      return taskCount;
+    });
+    t.int('activeWorkerCount'); // TODO: Implement
+    t.boolean('active'); // TODO: Implement
+    t.list.field('tasks', {
+      nullable: true,
+      type: 'Task',
+      args: {
+        // TODO: Change to cursor based pagination because XRANGE (https://redis.io/commands/xrange)
+        // doesn't offer a good way to do offset based pagination
+        offset: intArg({
+          default: 0,
+          description: 'The number of items to skip, for pagination'
+        }),
+        limit: intArg({
+          default: 10,
+          description: 'The number of items to fetch starting from the offset, for pagination'
+        })
+      }
+    });
   }
 });
 
@@ -243,8 +252,16 @@ exports.Query = objectType({
           required: true
         })
       },
-      resolve(root, args, ctx) {
-        // TODO: Implement
+      async resolve(root, { name }, { redis }) {
+        const exists = await redis.exists(`${orkidDefaults.NAMESPACE}:queue:${name}`);
+
+        if (!exists) {
+          return null;
+        }
+
+        return {
+          name
+        };
       }
     });
   }

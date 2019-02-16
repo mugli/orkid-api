@@ -26,7 +26,10 @@ let redis;
 
 async function seed() {
   if (!program.confirmFlush) {
-    const confirm = await new Confirm('All data in your redis sever will be cleared. Proceed?').run();
+    const confirm = await new Confirm({
+      message: 'All data in your redis sever will be cleared. Proceed?',
+      default: false
+    }).run();
     if (!confirm) {
       log(chalk.red('Quitting without seeding any data!'));
       process.exit(1);
