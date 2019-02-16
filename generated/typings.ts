@@ -30,8 +30,8 @@ export interface NexusGenRootTypes {
   Mutation: {};
   Query: {};
   Queue: { // root type
-    active: boolean; // Boolean!
     activeWorkerCount: number; // Int!
+    isActive: boolean; // Boolean!
     name: string; // String!
   }
   ResultList: {};
@@ -99,8 +99,8 @@ export interface NexusGenFieldTypes {
     stat: NexusGenRootTypes['Stat'] | null; // Stat
   }
   Queue: { // field return type
-    active: boolean; // Boolean!
     activeWorkerCount: number; // Int!
+    isActive: boolean; // Boolean!
     name: string; // String!
     taskCount: number; // Int!
     taskFeed: NexusGenRootTypes['TaskFeed'] | null; // TaskFeed

@@ -191,7 +191,7 @@ exports.Queue = objectType({
       return taskCount;
     });
     t.int('activeWorkerCount'); // TODO: Implement
-    t.boolean('active'); // TODO: Implement
+    t.boolean('isActive'); // TODO: Implement
     t.field('taskFeed', {
       nullable: true,
       type: 'TaskFeed',
@@ -203,8 +203,34 @@ exports.Queue = objectType({
           default: 10
         })
       },
-      resolve(root, { nextCursor, limit }, { redis }) {
-        // TODO: Implement
+      async resolve(root, { nextCursor, limit }, { redis }) {
+        const qname = `${orkidDefaults.NAMESPACE}:queue:${root.name}`;
+        const start = nextCursor ? Base64.decode(nextCursor) : '-';
+        const oneMore = limit + 1;
+
+        const tasks = (await redis.xrange(qname, start, '+', 'COUNT', oneMore)).map(t => ({
+          id: t.id,
+          data: t.data.data,
+          dedupKey: t.data.dedupKey,
+          retryCount: t.data.retryCount,
+          qname: root.name,
+          at: new Date(Number(t.id.split('-')[0])).toISOString()
+        }));
+
+        let hasNextPage = false;
+        let newCursor = null;
+
+        if (oneMore === tasks.length) {
+          hasNextPage = true;
+          const t = tasks.pop();
+          newCursor = Base64.encode(t.id);
+        }
+
+        return {
+          hasNextPage,
+          nextCursor: newCursor,
+          tasks
+        };
       }
     });
   }

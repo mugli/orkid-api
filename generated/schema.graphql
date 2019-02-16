@@ -39,8 +39,8 @@ type Query {
 }
 
 type Queue {
-  active: Boolean!
   activeWorkerCount: Int!
+  isActive: Boolean!
   name: String!
   taskCount: Int!
   taskFeed(limit: Int = 10, nextCursor: String = null): TaskFeed
