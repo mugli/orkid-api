@@ -4,7 +4,6 @@
   "description": "GraphQL API to Monitoring and Manage Orkid Task Queue",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "NODE_ENV=development nodemon ./src/server.js",
     "flush-and-seed": "node seed/flushall-and-seed.js"
   },
