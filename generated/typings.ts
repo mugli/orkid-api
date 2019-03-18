@@ -84,7 +84,9 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     deleteQueue: NexusGenRootTypes['ActionStatus'] | null; // ActionStatus
     pauseAll: NexusGenRootTypes['ActionStatus'] | null; // ActionStatus
+    resetGlobalStats: NexusGenRootTypes['ActionStatus'] | null; // ActionStatus
     resumeAll: NexusGenRootTypes['ActionStatus'] | null; // ActionStatus
+    updateGlobalSettings: NexusGenRootTypes['ActionStatus'] | null; // ActionStatus
   }
   Query: { // field return type
     deadList: NexusGenRootTypes['DeadList'] | null; // DeadList

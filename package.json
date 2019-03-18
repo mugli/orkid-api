@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/mugli/orkid-api#readme",
   "dependencies": {
-    "apollo-server-express": "^2.4.0",
+    "apollo-server-express": "^2.4.8",
     "body-parser": "^1.18.3",
     "chalk": "^2.4.2",
     "commander": "^2.19.0",
@@ -34,7 +34,7 @@
     "graphql-tools": "^4.0.4",
     "ioredis": "^4.6.2",
     "js-base64": "^2.5.1",
-    "nexus": "^0.9.13",
+    "nexus": "^0.11.5",
     "prompt-confirm": "^2.0.4",
     "uuid": "^3.3.2"
   },

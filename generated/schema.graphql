@@ -25,7 +25,9 @@ type FailedList {
 type Mutation {
   deleteQueue: ActionStatus
   pauseAll: ActionStatus
+  resetGlobalStats: ActionStatus
   resumeAll: ActionStatus
+  updateGlobalSettings: ActionStatus
 }
 
 type Query {

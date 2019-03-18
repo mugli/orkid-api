@@ -157,6 +157,20 @@ exports.Mutation = objectType({
         // TODO: Implement
       }
     });
+    t.field('resetGlobalStats', {
+      nullable: true,
+      type: 'ActionStatus',
+      resolve() {
+        // TODO: Implement
+      }
+    });
+    t.field('updateGlobalSettings', {
+      nullable: true,
+      type: 'ActionStatus',
+      resolve() {
+        // TODO: Implement
+      }
+    });
   }
 });
 

@@ -66,7 +66,7 @@ Open the URL in the browser to launch GraphQL playground (showed in the screensh
 
 ## Authors
 
-- Mehdi Hasan Khan ([@MehdiHK](https://twitter.com/MehdiHK))
+- Mehdi Hasan Khan (Twitter: [@MehdiHK](https://twitter.com/MehdiHK))
 
 ## License
 
