@@ -1,19 +1,20 @@
 const express = require('express');
 const cors = require('cors');
+
 const prepareIoredis = require('../utils/prepare-ioredis');
 prepareIoredis();
 
 const IORedis = require('ioredis');
-const redis = new IORedis(); // TODO: Pass redis config
+const redis = new IORedis(); // Pass custom redis config here
 const Apollo = require('./apollo');
 const apollo = Apollo(redis);
 
 const app = express();
-app.use(cors()); // TODO: Pass custom corsOptions
+app.use(cors());
 app.set('x-powered-by', false);
 
-apollo.applyMiddleware({ app });
+apollo.applyMiddleware({ app, path: '/api/graphql' });
 
 app.listen(4000, '0.0.0.0', () => {
-  console.log(`Orkid API ready at http://localhost:4000${apollo.graphqlPath}`);
+  console.log(`Orkid API ready in Development Mode at http://localhost:4000${apollo.graphqlPath}`);
 });

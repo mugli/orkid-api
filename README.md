@@ -19,7 +19,7 @@ _If you are contributing to the API or UI projects, please read below._
 
 ## Install
 
-In a project where you want to consume the API (typically an Orkid UI project):
+In a project where you want to consume the API (typically in a [Orkid UI project](https://github.com/mugli/orkid-ui)):
 
 ```
 npm install orkid-api --save
@@ -60,13 +60,13 @@ npm run dev
 
 It should show:
 
-> Orkid API ready at http://localhost:4000/graphql
+> Orkid API ready at http://localhost:4000/api/graphql
 
 Open the URL in the browser to launch GraphQL playground (showed in the screenshot above).
 
 ## Authors
 
-- Mehdi Hasan Khan (Twitter: [@MehdiHK](https://twitter.com/MehdiHK))
+- Mehdi Hasan Khan ([@MehdiHK](https://twitter.com/MehdiHK))
 
 ## License
 
