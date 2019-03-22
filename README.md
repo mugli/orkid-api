@@ -25,7 +25,7 @@ In a project where you want to consume the API (typically in a [Orkid UI project
 npm install orkid-api --save
 ```
 
-## Development Mode
+## Development
 
 ### Minimum Requirements
 
