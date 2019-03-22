@@ -342,8 +342,9 @@ exports.Query = objectType({
       nullable: true,
       type: 'Stat',
       async resolve(root, args, { redis }) {
+        const defaultStat = { processed: 0, failed: 0, dead: 0, waiting: 0, retries: 0 };
         const stat = await redis.hgetall(orkidDefaults.STAT);
-        return stat;
+        return { ...defaultStat, ...stat };
       }
     });
     t.list.field('queueNames', {
