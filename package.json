@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=development nodemon ./src/server.js",
-    "flush-and-seed": "node bin/flushall-and-seed.js"
+    "flush-and-seed": "node bin/flushall-and-seed.js",
+    "lint": "eslint --quiet .",
+    "prettier": "prettier --write ./**/*.js"
   },
   "bin": {
     "flushall-and-seed": "./bin/flushall-and-seed.js"
@@ -25,21 +27,28 @@
   },
   "homepage": "https://github.com/mugli/orkid-api#readme",
   "dependencies": {
-    "apollo-server-express": "^2.4.8",
-    "graphql": "^14.1.1",
+    "apollo-server-express": "^2.6.1",
+    "graphql": "^14.3.1",
     "graphql-tools": "^4.0.4",
-    "ioredis": "^4.6.2",
+    "ioredis": "^4.9.5",
     "js-base64": "^2.5.1",
-    "nexus": "^0.11.5",
+    "nexus": "^0.11.7",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "nodemon": "^1.18.10",
-    "express": "^4.16.4",
-    "cors": "^2.8.5",
-    "faker": "^4.1.0",
     "chalk": "^2.4.2",
-    "commander": "^2.19.0",
+    "commander": "^2.20.0",
+    "cors": "^2.8.5",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jest": "^22.6.4",
+    "eslint-plugin-prettier": "^3.1.0",
+    "express": "^4.17.1",
+    "faker": "^4.1.0",
+    "nodemon": "^1.19.1",
+    "prettier": "^1.17.1",
     "prompt-confirm": "^2.0.4"
   }
 }

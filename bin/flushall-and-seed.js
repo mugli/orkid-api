@@ -3,7 +3,8 @@
 const program = require('commander');
 const Confirm = require('prompt-confirm');
 const chalk = require('chalk');
-const log = console.log;
+
+const {log} = console;
 
 const { seed } = require('../utils/seed');
 

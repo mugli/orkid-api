@@ -1,27 +1,50 @@
-const prepareIoredis = require('../utils/prepare-ioredis');
 prepareIoredis();
 
 const IORedis = require('ioredis');
 const faker = require('faker');
+const prepareIoredis = require('../utils/prepare-ioredis');
 
 const { orkidDefaults } = require('../src/common');
 
-module.exports = {
-  seed
-};
+function getMailTask() {
+  return {
+    data: {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      body: faker.lorem.paragraph()
+    }
+  };
+}
+
+function getProductTask() {
+  const id = faker.random.uuid();
+  return {
+    data: {
+      id,
+      title: faker.commerce.productName(),
+      price: faker.commerce.price(),
+      quantity: faker.random.number()
+    },
+    dedupKey: id
+  };
+}
+
+function getSmsTask() {
+  return {
+    data: {
+      number: faker.phone.phoneNumber(),
+      name: faker.name.findName(),
+      text: faker.lorem.sentence()
+    }
+  };
+}
 
 const queues = [
   { name: 'mailer', fn: getMailTask },
   { name: 'insert-to-elasticsearch', fn: getProductTask },
   { name: 'sms', fn: getSmsTask }
 ];
-
-async function seed(redisConfig) {
-  const redis = new IORedis(redisConfig);
-
-  await redis.flushall();
-  await Promise.all([seedResult(redis), seedFailed(redis), seedDead(redis), seedQueues(redis), seedStat(redis)]);
-}
 
 async function seedStat(redis) {
   await redis.hmset(orkidDefaults.STAT, {
@@ -146,36 +169,13 @@ function getErrorDetails() {
   };
 }
 
-function getMailTask() {
-  return {
-    data: {
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      email: faker.internet.email(),
-      body: faker.lorem.paragraph()
-    }
-  };
+async function seed(redisConfig) {
+  const redis = new IORedis(redisConfig);
+
+  await redis.flushall();
+  await Promise.all([seedResult(redis), seedFailed(redis), seedDead(redis), seedQueues(redis), seedStat(redis)]);
 }
 
-function getProductTask() {
-  const id = faker.random.uuid();
-  return {
-    data: {
-      id,
-      title: faker.commerce.productName(),
-      price: faker.commerce.price(),
-      quantity: faker.random.number()
-    },
-    dedupKey: id
-  };
-}
-
-function getSmsTask() {
-  return {
-    data: {
-      number: faker.phone.phoneNumber(),
-      name: faker.name.findName(),
-      text: faker.lorem.sentence()
-    }
-  };
-}
+module.exports = {
+  seed
+};

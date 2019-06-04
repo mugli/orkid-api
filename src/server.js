@@ -2,11 +2,14 @@ const express = require('express');
 const cors = require('cors');
 
 const prepareIoredis = require('../utils/prepare-ioredis');
+
 prepareIoredis();
 
 const IORedis = require('ioredis');
+
 const redis = new IORedis(); // Pass custom redis config here
 const Apollo = require('./apollo');
+
 const apollo = Apollo(redis);
 
 const app = express();

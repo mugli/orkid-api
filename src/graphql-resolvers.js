@@ -184,7 +184,7 @@ exports.Stat = objectType({
       const queueNames = await redis.smembers(orkidDefaults.QUENAMES);
       const keys = queueNames.map(q => `${orkidDefaults.NAMESPACE}:queue:${q}`);
 
-      let waiting = (await Promise.all(keys.map(k => redis.xlen(k)))).reduce((acc, cur) => acc + cur, 0);
+      const waiting = (await Promise.all(keys.map(k => redis.xlen(k)))).reduce((acc, cur) => acc + cur, 0);
 
       return waiting;
     });
@@ -288,9 +288,9 @@ exports.Queue = objectType({
 
         const tasks = (await redis.xrange(qname, start, '+', 'COUNT', oneMore)).map(t => ({
           id: t.id,
-          data: t.data.data,
-          dedupKey: t.data.dedupKey,
-          retryCount: t.data.retryCount,
+          data: t.data ? t.data.data : null,
+          dedupKey: t.data ? t.data.dedupKey : null,
+          retryCount: t.data ? t.data.retryCount : 0,
           qname: root.name,
           at: new Date(Number(t.id.split('-')[0])).toISOString()
         }));

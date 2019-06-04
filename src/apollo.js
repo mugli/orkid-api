@@ -3,6 +3,7 @@ const { GraphQLError } = require('graphql');
 const { v4 } = require('uuid');
 
 const prepareIoredis = require('../utils/prepare-ioredis');
+
 prepareIoredis();
 
 const { schema } = require('./graphql-schema');
