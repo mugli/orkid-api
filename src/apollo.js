@@ -11,6 +11,10 @@ const apollo = (redisConf = {}) => {
     mocks: false,
     tracing: true,
     cors: true,
+    formatError: err => {
+      console.error(err);
+      return err;
+    },
     context: ({ req }) => ({
       req,
       redis
