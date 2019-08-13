@@ -22,6 +22,7 @@ module.exports = {
     'no-restricted-syntax': 0,
     'no-loop-func': 0,
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
-    'no-use-before-define': 'warn'
+    'no-use-before-define': 'warn',
+    'no-continue': 0
   }
 };

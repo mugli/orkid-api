@@ -2,6 +2,7 @@ const { Base64 } = require('js-base64');
 const { objectType, intArg, stringArg } = require('nexus');
 
 const { orkidDefaults } = require('./common');
+const { parseMessageResponse } = require('./redis-transformers');
 
 exports.ActionStatus = objectType({
   name: 'ActionStatus',
@@ -185,6 +186,7 @@ exports.Stat = objectType({
       const queueNames = await redis.smembers(orkidDefaults.QUENAMES);
       const keys = queueNames.map(q => `${orkidDefaults.NAMESPACE}:queue:${q}`);
 
+      // xlen: https://redis.io/commands/xlen
       const waiting = (await Promise.all(keys.map(k => redis.xlen(k)))).reduce((acc, cur) => acc + cur, 0);
 
       return waiting;
@@ -242,6 +244,8 @@ exports.Queue = objectType({
     t.string('name');
     t.int('taskCount', async (root, args, { redis }) => {
       const qname = `${orkidDefaults.NAMESPACE}:queue:${root.name}`;
+
+      // xlen: https://redis.io/commands/xlen
       const taskCount = await redis.xlen(qname);
       return taskCount;
     });
@@ -288,7 +292,10 @@ exports.Queue = objectType({
         const start = nextCursor ? Base64.decode(nextCursor) : '-';
         const oneMore = limit + 1;
 
-        const tasks = (await redis.xrange(qname, start, '+', 'COUNT', oneMore)).map(task => ({
+        // xrange: https://redis.io/commands/xrange
+        const redisReply = await redis.xrange(qname, start, '+', 'COUNT', oneMore);
+        const transformedReply = parseMessageResponse(redisReply);
+        const tasks = transformedReply.map(task => ({
           id: task.id,
           data: task.data ? task.data.data : null,
           dedupKey: task.data ? task.data.dedupKey : null,
