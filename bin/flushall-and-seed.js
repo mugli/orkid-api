@@ -4,7 +4,7 @@ const program = require('commander');
 const Confirm = require('prompt-confirm');
 const chalk = require('chalk');
 
-const {log} = console;
+const { log } = console;
 
 const { seed } = require('../utils/seed');
 
@@ -13,8 +13,6 @@ program
   .option('-p, --port <port>', 'Redis Port', 6379)
   .option('-y, --confirm-flush', 'Proceed with flushing and seeding without reconfirmation')
   .parse(process.argv);
-
-let redis;
 
 async function flushAndSeed() {
   if (!program.confirmFlush) {

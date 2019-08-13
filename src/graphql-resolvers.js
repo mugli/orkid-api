@@ -1,6 +1,7 @@
-const { objectType, intArg, stringArg } = require('nexus');
-const { orkidDefaults } = require('./common');
 const { Base64 } = require('js-base64');
+const { objectType, intArg, stringArg } = require('nexus');
+
+const { orkidDefaults } = require('./common');
 
 exports.ActionStatus = objectType({
   name: 'ActionStatus',
@@ -249,7 +250,8 @@ exports.Queue = objectType({
       let retval = 0;
 
       for (const cli of clients) {
-        cli.split(' ').map(v => {
+        const values = cli.split(' ');
+        for (const v of values) {
           if (v.startsWith('name=')) {
             const namePair = v.split('=');
             if (namePair.length > 1 && namePair[1]) {
@@ -258,7 +260,7 @@ exports.Queue = objectType({
               }
             }
           }
-        });
+        }
       }
 
       return retval;
@@ -286,13 +288,13 @@ exports.Queue = objectType({
         const start = nextCursor ? Base64.decode(nextCursor) : '-';
         const oneMore = limit + 1;
 
-        const tasks = (await redis.xrange(qname, start, '+', 'COUNT', oneMore)).map(t => ({
-          id: t.id,
-          data: t.data ? t.data.data : null,
-          dedupKey: t.data ? t.data.dedupKey : null,
-          retryCount: t.data ? t.data.retryCount : 0,
+        const tasks = (await redis.xrange(qname, start, '+', 'COUNT', oneMore)).map(task => ({
+          id: task.id,
+          data: task.data ? task.data.data : null,
+          dedupKey: task.data ? task.data.dedupKey : null,
+          retryCount: task.data ? task.data.retryCount : 0,
           qname: root.name,
-          at: new Date(Number(t.id.split('-')[0])).toISOString()
+          at: new Date(Number(task.id.split('-')[0])).toISOString()
         }));
 
         let hasNextPage = false;
@@ -300,8 +302,8 @@ exports.Queue = objectType({
 
         if (oneMore === tasks.length) {
           hasNextPage = true;
-          const t = tasks.pop();
-          newCursor = Base64.encode(t.id);
+          const task = tasks.pop();
+          newCursor = Base64.encode(task.id);
         }
 
         return {

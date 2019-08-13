@@ -1,8 +1,5 @@
-prepareIoredis();
-
 const IORedis = require('ioredis');
 const faker = require('faker');
-const prepareIoredis = require('../utils/prepare-ioredis');
 
 const { orkidDefaults } = require('../src/common');
 
@@ -135,7 +132,6 @@ async function seedDead(redis) {
 
 async function seedQueues(redis) {
   const pipeline = redis.pipeline();
-  const p = [];
   for (const q of queues) {
     for (let i = 0; i < 1000; i++) {
       const task = q.fn();

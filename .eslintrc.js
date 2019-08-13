@@ -16,9 +16,12 @@ module.exports = {
     ecmaVersion: 2018
   },
   rules: {
+    'prettier/prettier': 'error',
     radix: 0,
     'no-plusplus': 0,
     'no-restricted-syntax': 0,
-    'no-loop-func': 0
+    'no-loop-func': 0,
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    'no-use-before-define': 'warn'
   }
 };
