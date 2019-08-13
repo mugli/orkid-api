@@ -1,10 +1,10 @@
 # orkid-api
 
 [![NPM version](https://img.shields.io/npm/v/orkid-api.svg)](https://www.npmjs.com/package/orkid-api)
-![](https://img.shields.io/david/mugli/orkid-api.svg?style=flat)
-![](https://img.shields.io/david/dev/mugli/orkid-api.svg?style=flat)
-![](https://img.shields.io/node/v/orkid-api.svg?style=flat)
-![](https://img.shields.io/npm/l/orkid-api.svg?style=flat)
+![Dependencies](https://img.shields.io/david/mugli/orkid-api.svg?style=flat)
+![Dev Dependencies](https://img.shields.io/david/dev/mugli/orkid-api.svg?style=flat)
+![Required Node Version](https://img.shields.io/node/v/orkid-api.svg?style=flat)
+![License](https://img.shields.io/npm/l/orkid-api.svg?style=flat)
 
 GraphQL API to monitor and manage [Orkid task queue](https://github.com/mugli/orkid-node).
 
