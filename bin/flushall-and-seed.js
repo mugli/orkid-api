@@ -31,7 +31,7 @@ async function flushAndSeed() {
     host: program.host
     // TODO: Pass other options like password: 'auth', db: 0 etc
   });
-  log(chalk.green('Done'));
+  log(chalk.green('Done seeding.'));
 
   process.exit(0);
 }

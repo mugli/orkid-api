@@ -13,6 +13,6 @@ app.set('x-powered-by', false);
 
 apollo.applyMiddleware({ app, path: '/api/graphql' });
 
-app.listen(4000, '0.0.0.0', () => {
-  console.log(`Orkid API ready in Development Mode at http://localhost:4000${apollo.graphqlPath}`);
+app.listen(4100, '0.0.0.0', () => {
+  console.log(`Orkid API ready in Development Mode at http://localhost:4100${apollo.graphqlPath}`);
 });

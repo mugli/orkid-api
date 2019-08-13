@@ -60,7 +60,7 @@ npm run dev
 
 It should show:
 
-> Orkid API ready at http://localhost:4000/api/graphql
+> Orkid API ready at http://localhost:4100/api/graphql
 
 Open the URL in the browser to launch GraphQL playground (showed in the screenshot above).
 
