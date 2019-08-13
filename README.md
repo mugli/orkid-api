@@ -76,5 +76,5 @@ MIT
 
 ### Related Projects
 
-- [orkid-node](https://github.com/mugli/orkid-node): Reliable and modern Redis based task queue for Node.js
-- [orkid-ui](https://github.com/mugli/orkid-ui): Dashboard to monitor and manage Orkid task queue
+- [orkid-node](https://github.com/mugli/orkid-node): Reliable and modern Redis based task queue for Node.js. Use this to produce and consume jobs.
+- [orkid-ui](https://github.com/mugli/orkid-ui): Dashboard to monitor and manage Orkid task queue.

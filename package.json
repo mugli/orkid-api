@@ -1,13 +1,13 @@
 {
   "name": "orkid-api",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "GraphQL API to Monitoring and Manage Orkid Task Queue",
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=development nodemon ./src/server.js",
     "flush-and-seed": "node bin/flushall-and-seed.js",
     "lint": "eslint .",
-    "prettier": "prettier --write ./**/*.js"
+    "prettier": "prettier --write '**/*.js'"
   },
   "bin": {
     "flushall-and-seed": "./bin/flushall-and-seed.js"
