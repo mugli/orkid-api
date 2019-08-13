@@ -26,3 +26,9 @@ pids
 # Project Specific Files
 dump.rdb
 screenshot.png
+.circleci
+.eslintrc.js
+.prettierignore
+.prettierrc.json
+.release-it.js
+changelog-template.hbs

@@ -1,13 +1,17 @@
 {
   "name": "orkid-api",
-  "version": "0.5.0",
+  "version": "0.4.0",
   "description": "GraphQL API to Monitoring and Manage Orkid Task Queue",
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=development nodemon ./src/server.js",
     "flush-and-seed": "node bin/flushall-and-seed.js",
     "lint": "eslint .",
-    "prettier": "prettier --write '**/*.js'"
+    "prettier": "prettier --write '**/*.js'",
+    "changelog": "auto-changelog",
+    "release:check": "npm run lint",
+    "release": "npm run release:check && release-it",
+    "release:dry": "npm run release:check && release-it --dry-run"
   },
   "bin": {
     "flushall-and-seed": "./bin/flushall-and-seed.js"
@@ -16,7 +20,6 @@
     "type": "git",
     "url": "git+https://github.com/mugli/orkid-api.git"
   },
-  "keywords": [],
   "author": "Mehdi Hasan Khan <mhasan@omicronlab.com> (https://about.me/mehdi.hasan.khan)",
   "license": "MIT",
   "bugs": {
@@ -37,6 +40,7 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "auto-changelog": "*",
     "chalk": "^2.4.2",
     "commander": "^3.0.0",
     "cors": "^2.8.5",
@@ -50,6 +54,26 @@
     "faker": "^4.1.0",
     "nodemon": "^1.19.1",
     "prettier": "^1.18.2",
-    "prompt-confirm": "^2.0.4"
-  }
+    "prompt-confirm": "^2.0.4",
+    "release-it": "*"
+  },
+  "keywords": [
+    "task-queues",
+    "job-queues",
+    "task-schedulers",
+    "job-schedulers",
+    "redis-queues",
+    "queues",
+    "workers",
+    "producers",
+    "consumers",
+    "worker-queues",
+    "redis-streams",
+    "redis",
+    "jobs",
+    "tasks",
+    "messages",
+    "message-queues",
+    "orkid"
+  ]
 }
