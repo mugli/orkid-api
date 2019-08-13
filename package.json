@@ -8,7 +8,6 @@
     "flush-and-seed": "node bin/flushall-and-seed.js",
     "lint": "eslint .",
     "prettier": "prettier --write '**/*.js'",
-    "changelog": "auto-changelog",
     "release:check": "npm run lint",
     "release": "npm run release:check && release-it",
     "release:dry": "npm run release:check && release-it --dry-run"
