@@ -23,6 +23,7 @@ module.exports = {
     'no-loop-func': 0,
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'no-use-before-define': 'warn',
-    'no-continue': 0
+    'no-continue': 0,
+    'no-console': 0
   }
 };

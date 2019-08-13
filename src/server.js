@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const IORedis = require('ioredis');
+const bodyParser = require('body-parser');
 
 const redis = new IORedis(); // Pass custom redis config here
 const Apollo = require('./apollo');
@@ -10,6 +11,21 @@ const apollo = Apollo(redis);
 const app = express();
 app.use(cors());
 app.set('x-powered-by', false);
+
+const requestLogger = function requestLogger(req, _res, next) {
+  if (req.body) {
+    console.log('------------------------');
+    console.log('Request (req.body.variables):', req.body.variables);
+    console.log('Request (req.body.query):', req.body.query);
+    console.log('------------------------');
+  }
+  next();
+};
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(bodyParser.json());
+  app.use(requestLogger);
+}
 
 apollo.applyMiddleware({ app, path: '/api/graphql' });
 
