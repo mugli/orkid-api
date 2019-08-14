@@ -4,7 +4,13 @@ const IORedis = require('ioredis');
 const { schema } = require('./graphql-schema');
 
 const apollo = (redisConf = {}) => {
-  const redis = new IORedis(redisConf);
+  const redis = new IORedis({
+    ...redisConf,
+    retryStrategy: function retryStrategy(times) {
+      const delay = Math.min(times * 50, 2000);
+      return delay;
+    }
+  });
 
   const apl = new ApolloServer({
     schema,
