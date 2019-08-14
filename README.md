@@ -18,15 +18,7 @@ Users of [Orkid UI](https://github.com/mugli/orkid-ui) don't have to use this se
 
 ![screenshot](https://raw.githubusercontent.com/mugli/orkid-api/master/screenshot.png)
 
---
-
-## Install
-
-In a project where you want to consume the API (typically in a [Orkid UI project](https://github.com/mugli/orkid-ui)):
-
-```
-npm install orkid-api --save
-```
+---
 
 ## Development
 
@@ -41,7 +33,7 @@ You don't have to have Orkid running so that the API can return data from Redis 
 
 Make sure `redis-server` is running. Then:
 
-```
+```sh
 npm run flush-and-seed
 ```
 
@@ -57,7 +49,7 @@ Enter `y` to continue.
 
 Make sure `redis-server` is running. Then:
 
-```
+```sh
 npm run dev
 ```
 
@@ -67,9 +59,13 @@ It should show:
 
 Open the URL in the browser to launch GraphQL playground (showed in the screenshot above).
 
-## Author
+---
 
-- Mehdi Hasan Khan ([@MehdiHK](https://twitter.com/MehdiHK))
+## Maintainer(s)
+
+- Mehdi Hasan Khan (Twitter: [@MehdiHK](https://twitter.com/MehdiHK))
+
+---
 
 ## License
 
