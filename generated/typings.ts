@@ -92,9 +92,9 @@ export interface NexusGenFieldTypes {
     deadList: NexusGenRootTypes['DeadList'] | null; // DeadList
     failedList: NexusGenRootTypes['FailedList'] | null; // FailedList
     queue: NexusGenRootTypes['Queue'] | null; // Queue
-    queueNames: string[] | null; // [String!]
+    queueNames: string[]; // [String!]!
     resultList: NexusGenRootTypes['ResultList'] | null; // ResultList
-    stat: NexusGenRootTypes['Stat'] | null; // Stat
+    stat: NexusGenRootTypes['Stat']; // Stat!
   }
   Queue: { // field return type
     activeWorkerCount: number; // Int!

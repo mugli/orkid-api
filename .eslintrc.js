@@ -24,6 +24,7 @@ module.exports = {
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'no-use-before-define': 'warn',
     'no-continue': 0,
-    'no-console': 0
+    'no-console': 0,
+    'no-await-in-loop': 0
   }
 };

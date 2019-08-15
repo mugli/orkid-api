@@ -348,7 +348,7 @@ exports.Query = objectType({
       }
     });
     t.field('stat', {
-      nullable: true,
+      nullable: false,
       type: 'Stat',
       async resolve(root, args, { redis }) {
         const defaultStat = { processed: 0, failed: 0, dead: 0, waiting: 0, retries: 0 };
@@ -357,11 +357,21 @@ exports.Query = objectType({
       }
     });
     t.list.field('queueNames', {
-      nullable: true,
+      nullable: false,
       type: 'String',
       async resolve(root, args, { redis }) {
+        const validQueueNames = [];
         const queueNames = await redis.smembers(orkidDefaults.QUENAMES);
-        return queueNames;
+
+        for (const name of queueNames) {
+          const exists = await redis.exists(`${orkidDefaults.NAMESPACE}:queue:${name}`);
+
+          if (exists) {
+            validQueueNames.push(name);
+          }
+        }
+
+        return validQueueNames;
       }
     });
     t.field('queue', {
