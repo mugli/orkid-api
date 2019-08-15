@@ -11,7 +11,20 @@ exports.ActionStatus = objectType({
   }
 });
 
-const getResultFeed = async (redis, feedName, nextCursor, limit) => {
+const deserializeTask = t => {
+  const r = JSON.parse(t);
+  if (r.data) {
+    r.data = JSON.stringify(r.data);
+  }
+
+  if (r.result) {
+    r.result = JSON.stringify(r.result);
+  }
+
+  return r;
+};
+
+const getResultLikeFeed = async (redis, feedName, nextCursor, limit) => {
   const start = nextCursor ? Number(Base64.decode(nextCursor)) : 0;
   const oneMore = start + limit;
 
@@ -30,19 +43,6 @@ const getResultFeed = async (redis, feedName, nextCursor, limit) => {
     nextCursor: newCursor,
     tasks
   };
-};
-
-const deserializeTask = t => {
-  const r = JSON.parse(t);
-  if (r.data) {
-    r.data = JSON.stringify(r.data);
-  }
-
-  if (r.result) {
-    r.result = JSON.stringify(r.result);
-  }
-
-  return r;
 };
 
 exports.DeadList = objectType({
@@ -66,7 +66,7 @@ exports.DeadList = objectType({
         })
       },
       resolve(root, { nextCursor, limit }, { redis }) {
-        return getResultFeed(redis, orkidDefaults.DEADLIST, nextCursor, limit);
+        return getResultLikeFeed(redis, orkidDefaults.DEADLIST, nextCursor, limit);
       }
     });
   }
@@ -93,7 +93,7 @@ exports.ResultList = objectType({
         })
       },
       resolve(root, { nextCursor, limit }, { redis }) {
-        return getResultFeed(redis, orkidDefaults.RESULTLIST, nextCursor, limit);
+        return getResultLikeFeed(redis, orkidDefaults.RESULTLIST, nextCursor, limit);
       }
     });
   }
@@ -120,7 +120,7 @@ exports.FailedList = objectType({
         })
       },
       resolve(root, { nextCursor, limit }, { redis }) {
-        return getResultFeed(redis, orkidDefaults.FAILEDLIST, nextCursor, limit);
+        return getResultLikeFeed(redis, orkidDefaults.FAILEDLIST, nextCursor, limit);
       }
     });
   }
