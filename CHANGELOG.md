@@ -2,7 +2,15 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
-#### [v0.5.0](https://github.com/mugli/orkid-api/compare/v0.4.0...v0.5.0)
+#### [v0.6.0](https://github.com/mugli/orkid-api/compare/0.5.0...v0.6.0)
+
+> 20 August 2019
+
+- Add changelog [`67eeee7`](https://github.com/mugli/orkid-api/commit/67eeee7aa79e437e7299848d410463b3844de299)
+- Make few fields non-nullable [`6af1eeb`](https://github.com/mugli/orkid-api/commit/6af1eeb33868b07c48807165b343b56603f41f85)
+- Minor refactor [`f21c38e`](https://github.com/mugli/orkid-api/commit/f21c38e727d457fe8caced1000eb64a280d64c13)
+
+#### [0.5.0](https://github.com/mugli/orkid-api/compare/v0.4.0...0.5.0)
 
 > 13 August 2019
 
