@@ -2,12 +2,20 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [v0.8.0](https://github.com/mugli/orkid-api/compare/v0.7.0...v0.8.0)
+
+> 4 October 2019
+
+- Update dependencies [`c60d6dd`](https://github.com/mugli/orkid-api/commit/c60d6dd8027b8a6f036c4c93af9d7f9f4208e066)
+- Update changelog [`ae06789`](https://github.com/mugli/orkid-api/commit/ae067893a3d942ea5ad097f021288585181fd943)
+
 #### [v0.7.0](https://github.com/mugli/orkid-api/compare/v0.6.0...v0.7.0)
 
 > 20 August 2019
 
 - Update changelog [`397c40f`](https://github.com/mugli/orkid-api/commit/397c40f9836270d9a714ab2d8bde2033c614c966)
 - Fix valid queue name check [`ed53202`](https://github.com/mugli/orkid-api/commit/ed532026a987f21e757898fd395c6f3228a7ee9a)
+- Release 0.7.0 [`cbb345d`](https://github.com/mugli/orkid-api/commit/cbb345d932abc80df283a662331515279a925018)
 
 #### [v0.6.0](https://github.com/mugli/orkid-api/compare/0.5.0...v0.6.0)
 
