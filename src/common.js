@@ -1,10 +1,10 @@
 const orkidDefaults = {
-  NAMESPACE: 'orkid',
-  RESULTLIST: 'orkid:internals:results',
-  FAILEDLIST: 'orkid:internals:failed',
-  DEADLIST: 'orkid:internals:dead',
-  STAT: 'orkid:internals:stat',
-  QUENAMES: 'orkid:internals:qnames'
+  NAMESPACE: '__orkid',
+  RESULTLIST: '__orkid:internals:results',
+  FAILEDLIST: '__orkid:internals:failed',
+  DEADLIST: '__orkid:internals:dead',
+  STAT: '__orkid:internals:stat',
+  QUENAMES: '__orkid:internals:qnames'
 };
 
 module.exports = {
