@@ -44,13 +44,25 @@ const queues = [
 ];
 
 async function seedStat(redis) {
-  await redis.hmset(orkidDefaults.STAT, {
+  const pipeline = redis.pipeline();
+
+  pipeline.hmset(orkidDefaults.STAT, {
     processed: faker.random.number(),
     failed: faker.random.number(),
     dead: faker.random.number(),
-    // waiting: will be calculated dynamically,
     retries: faker.random.number()
   });
+
+  for (const q of queues) {
+    pipeline.hmset(`${orkidDefaults.STAT}:${q.name}`, {
+      processed: faker.random.number(),
+      failed: faker.random.number(),
+      dead: faker.random.number(),
+      retries: faker.random.number()
+    });
+  }
+
+  await pipeline.exec();
 }
 
 async function seedResult(redis) {
@@ -62,6 +74,21 @@ async function seedResult(redis) {
 
       pipeline.lpush(
         orkidDefaults.RESULTLIST,
+        JSON.stringify({
+          id: faker.random.number(),
+          qname: q.name,
+          data: task.data,
+          dedupKey: task.dedupKey,
+          retryCount: faker.random.number(),
+          result: {
+            success: true
+          },
+          at: new Date().toISOString()
+        })
+      );
+
+      pipeline.lpush(
+        `${orkidDefaults.RESULTLIST}:${q.name}`,
         JSON.stringify({
           id: faker.random.number(),
           qname: q.name,
@@ -99,6 +126,19 @@ async function seedFailed(redis) {
           at: new Date().toISOString()
         })
       );
+
+      pipeline.lpush(
+        `${orkidDefaults.FAILEDLIST}:${q.name}`,
+        JSON.stringify({
+          id: faker.random.number(),
+          qname: q.name,
+          data: task.data,
+          dedupKey: task.dedupKey,
+          retryCount: faker.random.number(),
+          error: getErrorDetails(),
+          at: new Date().toISOString()
+        })
+      );
     }
   }
 
@@ -114,6 +154,19 @@ async function seedDead(redis) {
 
       pipeline.lpush(
         orkidDefaults.DEADLIST,
+        JSON.stringify({
+          id: faker.random.number(),
+          qname: q.name,
+          data: task.data,
+          dedupKey: task.dedupKey,
+          retryCount: faker.random.number(),
+          error: getErrorDetails(),
+          at: new Date().toISOString()
+        })
+      );
+
+      pipeline.lpush(
+        `${orkidDefaults.DEADLIST}:${q.name}`,
         JSON.stringify({
           id: faker.random.number(),
           qname: q.name,
