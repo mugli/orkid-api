@@ -31,12 +31,32 @@ type Mutation {
 }
 
 type Query {
-  deadList: DeadList
-  failedList: FailedList
+  deadList(
+    """
+    Set queueName for queue specific result, null for all queues/global results
+    """
+    queueName: String
+  ): DeadList
+  failedList(
+    """
+    Set queueName for queue specific result, null for all queues/global results
+    """
+    queueName: String
+  ): FailedList
   queue(name: String!): Queue
   queueNames: [String!]!
-  resultList: ResultList
-  stat: Stat!
+  resultList(
+    """
+    Set queueName for queue specific result, null for all queues/global results
+    """
+    queueName: String
+  ): ResultList
+  stat(
+    """
+    Set queueName for queue specific result, null for all queues/global results
+    """
+    queueName: String
+  ): Stat!
 }
 
 type Queue {

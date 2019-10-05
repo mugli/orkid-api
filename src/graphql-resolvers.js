@@ -49,8 +49,15 @@ exports.DeadList = objectType({
   name: 'DeadList',
   definition(t) {
     t.int('taskCount', {
-      async resolve(root, args, { redis }) {
-        const taskCount = await redis.llen(orkidDefaults.DEADLIST);
+      async resolve(
+        {
+          args: { queueName }
+        },
+        args,
+        { redis }
+      ) {
+        const namespace = queueName ? `${orkidDefaults.DEADLIST}:${queueName}` : orkidDefaults.DEADLIST;
+        const taskCount = await redis.llen(namespace);
         return taskCount;
       }
     });
@@ -65,8 +72,15 @@ exports.DeadList = objectType({
           default: 10
         })
       },
-      resolve(root, { nextCursor, limit }, { redis }) {
-        return getResultLikeFeed(redis, orkidDefaults.DEADLIST, nextCursor, limit);
+      resolve(
+        {
+          args: { queueName }
+        },
+        { nextCursor, limit },
+        { redis }
+      ) {
+        const namespace = queueName ? `${orkidDefaults.DEADLIST}:${queueName}` : orkidDefaults.DEADLIST;
+        return getResultLikeFeed(redis, namespace, nextCursor, limit);
       }
     });
   }
@@ -76,8 +90,15 @@ exports.ResultList = objectType({
   name: 'ResultList',
   definition(t) {
     t.int('taskCount', {
-      async resolve(root, args, { redis }) {
-        const taskCount = await redis.llen(orkidDefaults.RESULTLIST);
+      async resolve(
+        {
+          args: { queueName }
+        },
+        args,
+        { redis }
+      ) {
+        const namespace = queueName ? `${orkidDefaults.RESULTLIST}:${queueName}` : orkidDefaults.RESULTLIST;
+        const taskCount = await redis.llen(namespace);
         return taskCount;
       }
     });
@@ -92,8 +113,15 @@ exports.ResultList = objectType({
           default: 10
         })
       },
-      resolve(root, { nextCursor, limit }, { redis }) {
-        return getResultLikeFeed(redis, orkidDefaults.RESULTLIST, nextCursor, limit);
+      resolve(
+        {
+          args: { queueName }
+        },
+        { nextCursor, limit },
+        { redis }
+      ) {
+        const namespace = queueName ? `${orkidDefaults.RESULTLIST}:${queueName}` : orkidDefaults.RESULTLIST;
+        return getResultLikeFeed(redis, namespace, nextCursor, limit);
       }
     });
   }
@@ -103,8 +131,15 @@ exports.FailedList = objectType({
   name: 'FailedList',
   definition(t) {
     t.int('taskCount', {
-      async resolve(root, args, { redis }) {
-        const taskCount = await redis.llen(orkidDefaults.FAILEDLIST);
+      async resolve(
+        {
+          args: { queueName }
+        },
+        args,
+        { redis }
+      ) {
+        const namespace = queueName ? `${orkidDefaults.FAILEDLIST}:${queueName}` : orkidDefaults.FAILEDLIST;
+        const taskCount = await redis.llen(namespace);
         return taskCount;
       }
     });
@@ -119,8 +154,15 @@ exports.FailedList = objectType({
           default: 10
         })
       },
-      resolve(root, { nextCursor, limit }, { redis }) {
-        return getResultLikeFeed(redis, orkidDefaults.FAILEDLIST, nextCursor, limit);
+      resolve(
+        {
+          args: { queueName }
+        },
+        { nextCursor, limit },
+        { redis }
+      ) {
+        const namespace = queueName ? `${orkidDefaults.FAILEDLIST}:${queueName}` : orkidDefaults.FAILEDLIST;
+        return getResultLikeFeed(redis, namespace, nextCursor, limit);
       }
     });
   }
@@ -182,8 +224,8 @@ exports.Stat = objectType({
     t.int('processed');
     t.int('failed');
     t.int('dead');
-    t.int('waiting', async (root, args, { redis }) => {
-      const queueNames = await redis.smembers(orkidDefaults.QUENAMES);
+    t.int('waiting', async (root, { queueName }, { redis }) => {
+      const queueNames = queueName ? [queueName] : await redis.smembers(orkidDefaults.QUENAMES);
       const keys = queueNames.map(q => `${orkidDefaults.NAMESPACE}:queue:${q}`);
 
       // xlen: https://redis.io/commands/xlen
@@ -329,30 +371,55 @@ exports.Query = objectType({
     t.field('resultList', {
       nullable: true,
       type: 'ResultList',
-      resolve() {
-        return {};
+      args: {
+        queueName: stringArg({
+          description: 'Set queueName for queue specific result, null for all queues/global results',
+          required: false
+        })
+      },
+      resolve(_, args) {
+        return { args };
       }
     });
     t.field('deadList', {
       nullable: true,
       type: 'DeadList',
-      resolve() {
-        return {};
+      args: {
+        queueName: stringArg({
+          description: 'Set queueName for queue specific result, null for all queues/global results',
+          required: false
+        })
+      },
+      resolve(_, args) {
+        return { args };
       }
     });
     t.field('failedList', {
       nullable: true,
       type: 'FailedList',
-      resolve() {
-        return {};
+      args: {
+        queueName: stringArg({
+          description: 'Set queueName for queue specific result, null for all queues/global results',
+          required: false
+        })
+      },
+      resolve(_, args) {
+        return { args };
       }
     });
     t.field('stat', {
       nullable: false,
       type: 'Stat',
-      async resolve(root, args, { redis }) {
-        const defaultStat = { processed: 0, failed: 0, dead: 0, waiting: 0, retries: 0 };
-        const stat = await redis.hgetall(orkidDefaults.STAT);
+      args: {
+        queueName: stringArg({
+          description: 'Set queueName for queue specific result, null for all queues/global results',
+          required: false
+        })
+      },
+      async resolve(root, { queueName }, { redis }) {
+        const defaultStat = { processed: 0, failed: 0, dead: 0, retries: 0 };
+        const namespace = queueName ? `${orkidDefaults.STAT}:${queueName}` : orkidDefaults.STAT;
+        const stat = await redis.hgetall(namespace);
         return { ...defaultStat, ...stat };
       }
     });
@@ -364,11 +431,10 @@ exports.Query = objectType({
         const queueNames = await redis.smembers(orkidDefaults.QUENAMES);
 
         for (const name of queueNames) {
-          const exists = await redis.exists(name);
+          const exists = await redis.exists(`${orkidDefaults.NAMESPACE}:queue:${name}`);
 
           if (exists) {
-            const splitted = name.split(':');
-            validQueueNames.push(splitted[splitted.length - 1]);
+            validQueueNames.push(name);
           }
         }
 

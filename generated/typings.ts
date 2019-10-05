@@ -146,8 +146,20 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    deadList: { // args
+      queueName?: string | null; // String
+    }
+    failedList: { // args
+      queueName?: string | null; // String
+    }
     queue: { // args
       name: string; // String!
+    }
+    resultList: { // args
+      queueName?: string | null; // String
+    }
+    stat: { // args
+      queueName?: string | null; // String
     }
   }
   Queue: {
