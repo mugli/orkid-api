@@ -218,39 +218,28 @@ exports.Mutation = objectType({
   }
 });
 
+const getQueueStat = async (redis, queueName) => {
+  const defaultStat = { processed: 0, failed: 0, dead: 0, waiting: 0, retries: 0 };
+  const namespace = queueName ? `${orkidDefaults.STAT}:${queueName}` : orkidDefaults.STAT;
+  const stat = await redis.hgetall(namespace);
+
+  const queueNames = queueName ? [queueName] : await redis.smembers(orkidDefaults.QUENAMES);
+  const keys = queueNames.map(q => `${orkidDefaults.NAMESPACE}:queue:${q}`);
+
+  // xlen: https://redis.io/commands/xlen
+  const waiting = (await Promise.all(keys.map(k => redis.xlen(k)))).reduce((acc, cur) => acc + cur, 0);
+
+  return { ...defaultStat, ...stat, waiting };
+};
+
 exports.Stat = objectType({
   name: 'Stat',
   definition(t) {
     t.int('processed');
     t.int('failed');
     t.int('dead');
-    t.int('waiting', async (root, { queueName }, { redis }) => {
-      const queueNames = queueName ? [queueName] : await redis.smembers(orkidDefaults.QUENAMES);
-      const keys = queueNames.map(q => `${orkidDefaults.NAMESPACE}:queue:${q}`);
-
-      // xlen: https://redis.io/commands/xlen
-      const waiting = (await Promise.all(keys.map(k => redis.xlen(k)))).reduce((acc, cur) => acc + cur, 0);
-
-      return waiting;
-    });
+    t.int('waiting');
     t.int('retries');
-    t.boolean('someQueuesArePaused', async (root, args, { redis }) => {
-      const queueNames = await redis.smembers(orkidDefaults.QUENAMES);
-      const settingsKeys = queueNames.map(q => `${orkidDefaults.NAMESPACE}:queue:${q}:settings`);
-      const allPaused = (await Promise.all(settingsKeys.map(k => redis.hget(k, 'paused')))).map(
-        v => !!v && Number(v) === 1
-      );
-
-      let retval = false;
-      for (const v of allPaused) {
-        if (v) {
-          retval = true;
-          break;
-        }
-      }
-
-      return retval;
-    });
   }
 });
 
@@ -284,12 +273,12 @@ exports.Queue = objectType({
   name: 'Queue',
   definition(t) {
     t.string('name');
-    t.int('taskCount', async (root, args, { redis }) => {
-      const qname = `${orkidDefaults.NAMESPACE}:queue:${root.name}`;
-
-      // xlen: https://redis.io/commands/xlen
-      const taskCount = await redis.xlen(qname);
-      return taskCount;
+    t.field('stat', {
+      nullable: false,
+      type: 'Stat',
+      resolve(root, _, { redis }) {
+        return getQueueStat(redis, root.name);
+      }
     });
     t.int('activeWorkerCount', async (root, args, { redis }) => {
       const clients = (await redis.client('LIST')).split('\n');
@@ -417,10 +406,7 @@ exports.Query = objectType({
         })
       },
       async resolve(root, { queueName }, { redis }) {
-        const defaultStat = { processed: 0, failed: 0, dead: 0, retries: 0 };
-        const namespace = queueName ? `${orkidDefaults.STAT}:${queueName}` : orkidDefaults.STAT;
-        const stat = await redis.hgetall(namespace);
-        return { ...defaultStat, ...stat };
+        return getQueueStat(redis, queueName);
       }
     });
     t.list.field('queueNames', {

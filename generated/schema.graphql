@@ -63,7 +63,7 @@ type Queue {
   activeWorkerCount: Int!
   isPaused: Boolean!
   name: String!
-  taskCount: Int!
+  stat: Stat!
   taskFeed(limit: Int = 10, nextCursor: String = null): TaskFeed
 }
 
@@ -77,7 +77,6 @@ type Stat {
   failed: Int!
   processed: Int!
   retries: Int!
-  someQueuesArePaused: Boolean!
   waiting: Int!
 }
 

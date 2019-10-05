@@ -38,6 +38,7 @@ export interface NexusGenRootTypes {
     failed: number; // Int!
     processed: number; // Int!
     retries: number; // Int!
+    waiting: number; // Int!
   }
   Task: { // root type
     at?: string | null; // String
@@ -100,7 +101,7 @@ export interface NexusGenFieldTypes {
     activeWorkerCount: number; // Int!
     isPaused: boolean; // Boolean!
     name: string; // String!
-    taskCount: number; // Int!
+    stat: NexusGenRootTypes['Stat']; // Stat!
     taskFeed: NexusGenRootTypes['TaskFeed'] | null; // TaskFeed
   }
   ResultList: { // field return type
@@ -112,7 +113,6 @@ export interface NexusGenFieldTypes {
     failed: number; // Int!
     processed: number; // Int!
     retries: number; // Int!
-    someQueuesArePaused: boolean; // Boolean!
     waiting: number; // Int!
   }
   Task: { // field return type
