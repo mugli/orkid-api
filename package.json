@@ -1,6 +1,6 @@
 {
   "name": "orkid-api",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "description": "GraphQL API to Monitoring and Manage Orkid Task Queue",
   "main": "index.js",
   "scripts": {
