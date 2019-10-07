@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [v0.9.1](https://github.com/mugli/orkid-api/compare/v0.9.0...v0.9.1)
+
+> 7 October 2019
+
+- Update changelog [`1e78dda`](https://github.com/mugli/orkid-api/commit/1e78dda2628fe9f476514ee494f28351a5a7cb92)
+- Fix: queueNames query [`54b6c11`](https://github.com/mugli/orkid-api/commit/54b6c115c5eb324204c883d0516501cf059bcfb4)
+
 #### [v0.9.0](https://github.com/mugli/orkid-api/compare/v0.8.0...v0.9.0)
 
 > 6 October 2019
