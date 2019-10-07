@@ -417,10 +417,11 @@ exports.Query = objectType({
         const queueNames = await redis.smembers(orkidDefaults.QUENAMES);
 
         for (const name of queueNames) {
-          const exists = await redis.exists(`${orkidDefaults.NAMESPACE}:queue:${name}`);
+          const qname = name.substring(`${orkidDefaults.NAMESPACE}:queue:`.length);
+          const exists = await redis.exists(`${orkidDefaults.NAMESPACE}:queue:${qname}`);
 
           if (exists) {
-            validQueueNames.push(name);
+            validQueueNames.push(qname);
           }
         }
 
