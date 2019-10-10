@@ -28,7 +28,7 @@ const getResultLikeFeed = async (redis, feedName, nextCursor, limit) => {
   const start = nextCursor ? Number(Base64.decode(nextCursor)) : 0;
   const oneMore = start + limit;
 
-  const tasks = (await redis.lrange(feedName, start, oneMore)).map(t => deserializeTask(t));
+  const tasks = (await redis.zrange(feedName, start, oneMore)).map(t => deserializeTask(t));
   let hasNextPage = false;
   let newCursor = null;
 
@@ -57,7 +57,7 @@ exports.DeadList = objectType({
         { redis }
       ) {
         const namespace = queueName ? `${orkidDefaults.DEADLIST}:${queueName}` : orkidDefaults.DEADLIST;
-        const taskCount = await redis.llen(namespace);
+        const taskCount = await redis.zcard(namespace);
         return taskCount;
       }
     });
@@ -98,7 +98,7 @@ exports.ResultList = objectType({
         { redis }
       ) {
         const namespace = queueName ? `${orkidDefaults.RESULTLIST}:${queueName}` : orkidDefaults.RESULTLIST;
-        const taskCount = await redis.llen(namespace);
+        const taskCount = await redis.zcard(namespace);
         return taskCount;
       }
     });
@@ -139,7 +139,7 @@ exports.FailedList = objectType({
         { redis }
       ) {
         const namespace = queueName ? `${orkidDefaults.FAILEDLIST}:${queueName}` : orkidDefaults.FAILEDLIST;
-        const taskCount = await redis.llen(namespace);
+        const taskCount = await redis.zcard(namespace);
         return taskCount;
       }
     });
