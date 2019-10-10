@@ -72,8 +72,9 @@ async function seedResult(redis) {
     for (let i = 0; i < 1000; i++) {
       const task = q.fn();
 
-      pipeline.lpush(
+      pipeline.zadd(
         orkidDefaults.RESULTLIST,
+        new Date().getTime().toString(),
         JSON.stringify({
           id: faker.random.number(),
           qname: q.name,
@@ -87,8 +88,9 @@ async function seedResult(redis) {
         })
       );
 
-      pipeline.lpush(
+      pipeline.zadd(
         `${orkidDefaults.RESULTLIST}:${q.name}`,
+        new Date().getTime().toString(),
         JSON.stringify({
           id: faker.random.number(),
           qname: q.name,
@@ -114,8 +116,9 @@ async function seedFailed(redis) {
     for (let i = 0; i < 1000; i++) {
       const task = q.fn();
 
-      pipeline.lpush(
+      pipeline.zadd(
         orkidDefaults.FAILEDLIST,
+        new Date().getTime().toString(),
         JSON.stringify({
           id: faker.random.number(),
           qname: q.name,
@@ -127,8 +130,9 @@ async function seedFailed(redis) {
         })
       );
 
-      pipeline.lpush(
+      pipeline.zadd(
         `${orkidDefaults.FAILEDLIST}:${q.name}`,
+        new Date().getTime().toString(),
         JSON.stringify({
           id: faker.random.number(),
           qname: q.name,
@@ -152,8 +156,9 @@ async function seedDead(redis) {
     for (let i = 0; i < 1000; i++) {
       const task = q.fn();
 
-      pipeline.lpush(
+      pipeline.zadd(
         orkidDefaults.DEADLIST,
+        new Date().getTime().toString(),
         JSON.stringify({
           id: faker.random.number(),
           qname: q.name,
@@ -165,8 +170,9 @@ async function seedDead(redis) {
         })
       );
 
-      pipeline.lpush(
+      pipeline.zadd(
         `${orkidDefaults.DEADLIST}:${q.name}`,
+        new Date().getTime().toString(),
         JSON.stringify({
           id: faker.random.number(),
           qname: q.name,
