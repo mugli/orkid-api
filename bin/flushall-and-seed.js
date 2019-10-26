@@ -17,7 +17,7 @@ program
 async function flushAndSeed() {
   if (!program.confirmFlush) {
     const confirm = await new Confirm({
-      message: 'All data in your redis sever will be cleared. Proceed?',
+      message: 'All data in your redis server will be cleared. Proceed?',
       default: false
     }).run();
     if (!confirm) {
