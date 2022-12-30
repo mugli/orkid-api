@@ -58,7 +58,7 @@
     "orkid": "^0.11.0",
     "prettier": "^1.18.2",
     "prompt-confirm": "^2.0.4",
-    "release-it": "^12.4.3"
+    "release-it": "^15.6.0"
   },
   "keywords": [
     "task-queues",
